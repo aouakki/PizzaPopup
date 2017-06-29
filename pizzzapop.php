@@ -14,7 +14,9 @@ if (!defined('RC_TC_BASE_DIR'))
 if (!defined('RC_TC_PLUGIN_URL'))
     define('RC_TC_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-
+/**
+ * popup template using jqueryUI modal
+ */
 function insert_popup()
 {
     $options = get_option('wppp_settings');
@@ -38,11 +40,21 @@ function insert_popup()
     echo '';
     echo '<div class="social" style="text-align: center">';
     echo '<span class="twitter">';
-    echo '<a href="https://twitter.com/mypizza_shop" data-href="https://plus.google.com/107350354213838732087"';
+    if ($options['wppp_text_field_3']) {
+        echo "<a href='" . $options['wppp_text_field_3'] . "'";
+    } else {
+
+        echo "<a href='https://twitter.com/mypizza_shop'";
+    }
     echo 'class="twitter-follow-button" data-show-count="false"></a>';
     echo '</span>';
     echo '<span class="Facebook">';
-    echo '<div class="fb-like" data-href="https://web.facebook.com/mypizzashopus/" data-layout="button_count"';
+    if ($options['wppp_text_field_3']) {
+        echo "<div class='fb-like' data-href='".$options['wppp_text_field_2']."' data-layout='button_count'";
+    } else {
+
+        echo '<div class="fb-like" data-href="https://web.facebook.com/mypizzashopus/" data-layout="button_count"';
+    }
     echo 'data-action="like" data-size="small" data-show-faces="true" data-share="false"></div>';
     echo '';
     echo '<p style="font-size : 16px; text-align:center; margin:5px;">OR</p>';
@@ -89,10 +101,9 @@ function insert_popup()
     echo '';
     echo '';
 
-    wp_enqueue_script( 'app',  RC_TC_PLUGIN_URL . "/assets/app.js", array('jquery'), '1.0', true );
+    wp_enqueue_script('app', RC_TC_PLUGIN_URL . "/assets/app.js", array('jquery'), '1.0', true);
 
-    wp_localize_script('app', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-
+    wp_localize_script('app', 'ajaxurl', admin_url('admin-ajax.php'));
 
 
 }
@@ -129,9 +140,9 @@ function subscribe_to_sendy()
             'boolean' => 'true'
         )
     );
-    $opts = array('http' => array('method'  => 'POST', 'header'  => 'Content-type: application/x-www-form-urlencoded', 'content' => $postdata));
-    $context  = stream_context_create($opts);
-    $result = file_get_contents($sendy_url.'/subscribe.php', false, $context);
+    $opts = array('http' => array('method' => 'POST', 'header' => 'Content-type: application/x-www-form-urlencoded', 'content' => $postdata));
+    $context = stream_context_create($opts);
+    $result = file_get_contents($sendy_url . '/subscribe.php', false, $context);
 //--------------------------------------------------//
 
     echo $result;
